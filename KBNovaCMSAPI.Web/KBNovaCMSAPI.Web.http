@@ -1,0 +1,6 @@
+@KBNovaCMSAPI.Web_HostAddress = http://localhost:5271
+
+GET {{KBNovaCMSAPI.Web_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\KBNovaCMS.Common\KBNovaCMS.Common.csproj" />
+    <ProjectReference Include="..\KBNovaCMS.Model\KBNovaCMS.Model.csproj" />
+  </ItemGroup>
+
 </Project>

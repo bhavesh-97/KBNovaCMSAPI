@@ -10,4 +10,9 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\KBNovaCMS.Common\KBNovaCMS.Common.csproj" />
+    <ProjectReference Include="..\KBNovaCMS.Service\KBNovaCMS.Service.csproj" />
+  </ItemGroup>
+
 </Project>

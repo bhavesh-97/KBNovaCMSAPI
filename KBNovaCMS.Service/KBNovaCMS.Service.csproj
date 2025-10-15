@@ -6,4 +6,12 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.FeatureManagement" Version="4.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\KBNovaCMS.IService\KBNovaCMS.IService.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -26,6 +26,7 @@ namespace KBNovaCMS.Common
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<ISessionManager, SSessionManager>();
             services.AddSingleton<INLog, SNLog>();
+            services.AddSingleton<IDbConnectionFactory, SDbConnectionFactory>();
 
             // AntiForgery configuration
             // services.AddAntiforgery(options =>

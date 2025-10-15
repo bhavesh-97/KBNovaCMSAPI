@@ -13,6 +13,9 @@ namespace KBNovaCMSAPI.Services
         public readonly INLog _INLog;
 
         public readonly ISessionManager _ISessionManager;
+        
+        public readonly IDbConnectionFactory _IDbConnectionFactory;
+
 
         // ------------------------------------ Constructor to inject all the required services ------------------
 
@@ -22,15 +25,17 @@ namespace KBNovaCMSAPI.Services
             IConfiguration _IConfiguration,                       // Service for configuration details
             IErrorManager _IErrorManager,                        // Service for error handling and logging
             INLog _INLog,                                        // Logging service using NLog
-            ISessionManager _ISessionManager                    // Service for managing session data
+            ISessionManager _ISessionManager,                    // Service for managing session data
+            IDbConnectionFactory _IDbConnectionFactory
           )
         {
             // Injecting all the dependencies into the ServiceManager
-            //this._IHttpContextAccessor = _IHttpContextAccessor;
-            //this._IHttpClientFactory = _IHttpClientFactory;
-            //this._IConfiguration = _IConfiguration;
-            //this._INLog = _INLog;
-            //this._ISessionManager = _ISessionManager;
+            this._IHttpContextAccessor = _IHttpContextAccessor;
+            this._IHttpClientFactory = _IHttpClientFactory;
+            this._IConfiguration = _IConfiguration;
+            this._INLog = _INLog;
+            this._ISessionManager = _ISessionManager;
+            this._IDbConnectionFactory = _IDbConnectionFactory;
         }
     }
 }

@@ -2,6 +2,7 @@ using GTDC.Model;
 using KBNovaCMS.Common;
 using KBNovaCMS.Common.Enums;
 using KBNovaCMS.CustomMiddleWare;
+using KBNovaCMS.Model;
 using KBNovaCMSAPI.Web.CustomMiddleWare;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
@@ -88,13 +89,15 @@ using System.Text.Json;
     }
 
      static void ConfigureDatabaseConnection(IConfiguration configuration)
-    {
-        // Example:
-        // MDapperConnection.IsDevlopment = true;
-        // MDapperConnection.IsDB_MySQL = true;
-        //
-        // MDapperConnection.ConnectionString = configuration.GetConnectionString("ApplicationDataBaseConnection_Devlopment") ?? string.Empty;
-    }
+       {
+            MDbConnection.IsDevlopment = true;
+            MDbConnection.IsDB_Postgresql = true;
+
+            // Set connection string based on environment (Development, Staging, Production)
+            MDbConnection.ConnectionString = MDbConnection.IsDevlopment
+                ? configuration.GetConnectionString("ApplicationDataBaseConnection_Devlopment") ?? string.Empty
+                    : configuration.GetConnectionString("ApplicationDataBaseConnection_Production") ?? string.Empty;
+        }
 
      static void AddServices(WebApplicationBuilder builder)
     {

@@ -1,6 +1,7 @@
 using KBNovaCMS.Common;
 using KBNovaCMS.Common.Enums;
 using KBNovaCMS.CustomMiddleWare;
+using KBNovaCMSAPI.Web.CustomMiddleWare;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using System.Text.Json;
@@ -68,9 +69,11 @@ using System.Text.Json;
             // Custom security and logging middlewares
             app.UseAntiXssMiddleware();
             app.UseMiddleware<SqlInjectionPreventionMiddleware>();
-
+            app.UseMiddleware<ExceptionMiddleware>();
+    
             app.UseAuthorization();
             app.MapControllers();
+
             await app.RunAsync();
         }
         catch (Exception e)

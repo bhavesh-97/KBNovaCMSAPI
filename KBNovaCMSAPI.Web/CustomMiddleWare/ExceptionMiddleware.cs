@@ -31,38 +31,72 @@ namespace KBNovaCMSAPI.Web.CustomMiddleWare
 
         private async Task HandleExceptionAsync(HttpContext context, Exception ex)
         {
-            var statusCode = (int)HttpStatusCode.InternalServerError;
-            var fileName = context.Request.Path;
-            var logMessage = ex.Message;
+            int statusCode = (int)HttpStatusCode.InternalServerError;
+            string userMessage = "An unexpected error occurred. Please try again later.";
+            string title = "Error";
 
-            // 🧠 Use your existing logging style
-            Log("Error", logMessage, ex, fileName);
+            switch (ex)
+            {
+                case KeyNotFoundException keyNotFound:
+                    statusCode = (int)HttpStatusCode.NotFound;
+                    userMessage = keyNotFound.Message;
+                    title = "Not Found";
+                    break;
 
-            context.Response.ContentType = "application/json";
-            context.Response.StatusCode = statusCode;
+                case InvalidOperationException invalidOpEx:
+                    statusCode = (int)HttpStatusCode.BadRequest;
+                    userMessage = invalidOpEx.Message;
+                    title = "Invalid Operation";
+                    break;
 
-            // 🧩 Build standard response model
+                case UnauthorizedAccessException _:
+                    statusCode = (int)HttpStatusCode.Unauthorized;
+                    userMessage = "You are not authorized to perform this action.";
+                    title = "Unauthorized";
+                    break;
+
+                case ArgumentException argEx:
+                //case ArgumentNullException argNullEx:
+                    statusCode = (int)HttpStatusCode.BadRequest;
+                    userMessage = ex.Message;
+                    title = "Invalid Argument";
+                    break;
+
+                case TimeoutException _:
+                    statusCode = (int)HttpStatusCode.RequestTimeout;
+                    userMessage = "The request timed out. Please try again.";
+                    title = "Timeout";
+                    break;
+
+                default:
+                    if (ex.InnerException != null)
+                        Log("InnerException", ex.InnerException.Message, ex.InnerException, context.Request.Path);
+                    break;
+            }
+
+            // Log the main exception
+            Log("Error", ex.Message, ex, context.Request.Path);
+
             var response = new JsonResponseModel
             {
                 IsError = true,
-                StrMessage = _env.IsDevelopment()
-                    ? ex.Message
-                    : "An unexpected error occurred. Please try again later.",
-                Title = "Error",
+                StrMessage = _env.IsDevelopment() ? ex.Message : userMessage,
+                Title = title,
                 Type = "Error",
                 Result = _env.IsDevelopment() ? new
                 {
                     exception = ex.GetType().Name,
+                    innerException = ex.InnerException?.Message,
                     traceId = context.TraceIdentifier,
                     stackTrace = ex.StackTrace
                 } : null
             };
 
-            var json = JsonSerializer.Serialize(response);
-            await context.Response.WriteAsync(json);
+            context.Response.ContentType = "application/json";
+            context.Response.StatusCode = statusCode;
+            await context.Response.WriteAsync(JsonSerializer.Serialize(response));
         }
 
-        // 🔹 Custom log wrapper using NLog / ILogger
         private void Log(string logType, string message, Exception ex, string fileName)
         {
             _logger.LogError(ex, "{LogType}: {Message} in {FileName}", logType, message, fileName);

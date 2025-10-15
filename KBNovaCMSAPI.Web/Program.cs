@@ -1,9 +1,11 @@
+using GTDC.Model;
 using KBNovaCMS.Common;
 using KBNovaCMS.Common.Enums;
 using KBNovaCMS.CustomMiddleWare;
 using KBNovaCMSAPI.Web.CustomMiddleWare;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Microsoft.Extensions.Configuration;
 using System.Text.Json;
 
         try
@@ -16,7 +18,7 @@ using System.Text.Json;
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-
+    
             // Load the application configuration from appsettings.json
             IConfigurationRoot configuration = LoadConfiguration();
 
@@ -57,12 +59,6 @@ using System.Text.Json;
             // Add caching for static files
             ConfigureStaticFileCaching(app);
 
-            // Enable routing
-            app.UseRouting();
-
-            // Enable CORS
-            app.UseCors("CorsPolicy");
-
             // Enable response compression
             app.UseResponseCompression();
 
@@ -70,9 +66,11 @@ using System.Text.Json;
             app.UseAntiXssMiddleware();
             app.UseMiddleware<SqlInjectionPreventionMiddleware>();
             app.UseMiddleware<ExceptionMiddleware>();
-    
-            app.UseAuthorization();
-            app.MapControllers();
+            
+            app.UseRouting();  
+            app.UseAuthorization();  
+            app.UseCors("CorsPolicy"); 
+
 
             await app.RunAsync();
         }
@@ -82,7 +80,7 @@ using System.Text.Json;
         }
 
     #region Helper  
-    static IConfigurationRoot LoadConfiguration()
+     static IConfigurationRoot LoadConfiguration()
     {
         return new ConfigurationBuilder()
             .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)

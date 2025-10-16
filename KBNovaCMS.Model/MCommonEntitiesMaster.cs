@@ -9,14 +9,14 @@ namespace KBNovaCMS.Model
     public class MCommonEntitiesMaster
     {
         #region Common-Entities
-        public bool IsActive { get; set; } = false;
-        public int CreatedBy { get; set; } = 0;
-        public DateTime? CreatedDate { get; set; } = DateTime.UtcNow;
-        public int UpdatedBy { get; set; } = 0;
-        public DateTime? UpdatedDate { get; set; } = DateTime.UtcNow;
-        public bool IsDeleted { get; set; } = false;
-        public int DeletedBy { get; set; } = 0;
-        public DateTime? DeletedDate { get; set; } = DateTime.UtcNow;
+        public bool isActive { get; set; } = false;
+        public int createdBy { get; set; } = 0;
+        public DateTime? createdDate { get; set; } = DateTime.UtcNow;
+        public int updatedBy { get; set; } = 0;
+        public DateTime? updatedDate { get; set; } = DateTime.UtcNow;
+        public bool isDeleted { get; set; } = false;
+        public int deletedBy { get; set; } = 0;
+        public DateTime? deletedDate { get; set; } = DateTime.UtcNow;
         #endregion
     }
 }

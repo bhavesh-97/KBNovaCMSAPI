@@ -49,10 +49,10 @@ namespace KBNovaCMS.Service
         {
             var dictionary = new Dictionary<string, object>
                 {
-                    { "p_UserID", Model.UserID },
-                    { "p_MobileNumber", Model.MobileNumber },
-                    { "p_EmailID", Model.EmailID},
-                    { "p_Password", Model.Password}
+                    { "p_UserID", Model.userID },
+                    { "p_MobileNumber", Model.mobileNumber },
+                    { "p_EmailID", Model.emailID},
+                    { "p_Password", Model.password}
                 };
 
             return await _IDbConnectionFactory.GetJSONDataAsync<T>(

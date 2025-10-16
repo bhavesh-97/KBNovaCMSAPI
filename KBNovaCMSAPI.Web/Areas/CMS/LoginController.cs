@@ -1,8 +1,10 @@
 ﻿using KBNovaCMS.Common;
+using KBNovaCMS.Common.Security.EncryptDecrypt;
 using KBNovaCMS.IService;
 using KBNovaCMS.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace KBNovaCMSAPI.Web.Areas.CMS
 {
@@ -18,27 +20,48 @@ namespace KBNovaCMSAPI.Web.Areas.CMS
             this._userLogin = userLogin;
         }
 
-        [HttpGet, Route("Login")]
-        public async Task<JsonResult> Login(string jsonString)
+        [HttpPost("Login")]
+        public async Task<JsonResult> Login([FromBody] MUserLogin userLogin)
         {
-            JsonResponseModel _JsonResponseModel = new JsonResponseModel();
-            if (!JsonUtility.ValidateIncomingJsonString<MUserLogin>(jsonString, ref _JsonResponseModel, out var MUserLogin))
+            JsonResponseModel response = new JsonResponseModel();
+
+            if (userLogin == null || !ModelState.IsValid)
             {
-                return new JsonResult(_JsonResponseModel);
+                response = Utility.CreateErrorResponse("Invalid or missing required parameters.");
+                return new JsonResult(response); // middleware will encrypt if needed
             }
 
-            if (MUserLogin == null || !ModelState.IsValid)
-            {
-                return new JsonResult(Utility.CreateErrorResponse("Invalid or missing required parameters."));
-            }
+            //var userData = await _userLogin.GetByMobileAndEmailID<string>(userLogin);
+            response = Utility.CreateSuccessResponse("Data retrieved successfully.");
 
-
-            // Fetch the user application data asynchronously
-            jsonString = await _userLogin.GetByMobileAndEmailID<string>(MUserLogin);
-
-            // Return success response with the fetched data
-            return new JsonResult(Utility.CreateSuccessResponse("Data retrieved successfully.", jsonString));
+            return new JsonResult(response); // middleware will encrypt automatically
         }
+
+        //public async Task<JsonResult> Login([FromBody] MUserLogin userLogin)
+        //{
+        //    JsonResponseModel _JsonResponseModel = new JsonResponseModel();
+
+        //    if (!JsonUtility.ValidateIncomingJsonString<MUserLogin>(jsonString, ref _JsonResponseModel, out var MUserLogin))
+        //    {
+        //        var encryptedError = EncryptDecrypt.FrontEncryptEncode(JsonConvert.SerializeObject(_JsonResponseModel));
+        //        return new JsonResult(encryptedError);
+        //    }
+
+        //    if (MUserLogin == null || !ModelState.IsValid)
+        //    {
+        //        var errorResponse = Utility.CreateErrorResponse("Invalid or missing required parameters.");
+        //        var encryptedError = EncryptDecrypt.FrontEncryptEncode(JsonConvert.SerializeObject(errorResponse));
+        //        return new JsonResult(encryptedError);
+        //    }
+
+        //    var userData = await _userLogin.GetByMobileAndEmailID<string>(MUserLogin);
+        //    var successResponse = Utility.CreateSuccessResponse("Data retrieved successfully.", userData);
+        //    var encryptedPayload = EncryptDecrypt.FrontEncryptEncode(JsonConvert.SerializeObject(successResponse));
+
+        //    return new JsonResult(encryptedPayload);
+        //}
+
+
 
     }
 }

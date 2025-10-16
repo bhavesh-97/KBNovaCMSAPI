@@ -67,6 +67,7 @@ using System.Text.Json;
             app.UseAntiXssMiddleware();
             app.UseMiddleware<SqlInjectionPreventionMiddleware>();
             app.UseMiddleware<ExceptionMiddleware>();
+            app.UseMiddleware<EncryptionMiddleware>();
             
             app.UseRouting();  
             app.UseAuthorization();  

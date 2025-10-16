@@ -15,8 +15,4 @@
     <ProjectReference Include="..\KBNovaCMS.Service\KBNovaCMS.Service.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Areas\Web\" />
-  </ItemGroup>
-
 </Project>

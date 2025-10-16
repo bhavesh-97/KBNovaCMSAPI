@@ -70,10 +70,21 @@ using System.Text.Json;
             
             app.UseRouting();  
             app.UseAuthorization();  
-            app.UseCors("CorsPolicy"); 
+            app.UseCors("CorsPolicy");
+            app.UseEndpoints(endpoints =>
+                {
+                    endpoints.MapControllers();
+                    endpoints.MapAreaControllerRoute(
+                        name: "CMS",
+                        areaName: "CMS",
+                        pattern: "CMS/{controller=Home}/{action=Index}/{id?}");
+                    endpoints.MapAreaControllerRoute(
+                        name: "Web",
+                        areaName: "Web",
+                        pattern: "Web/{controller=Home}/{action=Index}/{id?}");
+               });
 
-
-            await app.RunAsync();
+    await app.RunAsync();
         }
         catch (Exception e)
         {

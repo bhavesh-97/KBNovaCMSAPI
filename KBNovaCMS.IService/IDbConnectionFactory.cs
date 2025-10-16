@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace KBNovaCMS.IService
 {
-    public interface IDbConnectionFactory
+    public interface IDbConnectionFactory : IDisposable
     {
         bool ValidateConnection();
         Task<bool> ValidateConnectionAsync();

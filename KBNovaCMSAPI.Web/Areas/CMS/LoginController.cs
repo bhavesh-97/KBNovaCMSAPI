@@ -28,7 +28,8 @@ namespace KBNovaCMSAPI.Web.Areas.CMS
             if (userLogin == null || !ModelState.IsValid)
             {
                 response = Utility.CreateErrorResponse("Invalid or missing required parameters.");
-                return new JsonResult(response); // middleware will encrypt if needed
+                return new JsonResult(response);
+
             }
 
             //var userData = await _userLogin.GetByMobileAndEmailID<string>(userLogin);
